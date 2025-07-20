@@ -1,0 +1,628 @@
+openapi: 3.0.4
+info:
+  title: Library Management System
+  description: |-
+    A minimal RESTful API for managing library records.
+  version: 1.0.0
+
+tags:
+  - name: Authors
+  - name: Genres
+  - name: Publishers
+  - name: Books
+
+servers:
+  - url: http://localhost:8080
+
+paths:
+  /authors:
+    get:
+      tags:
+        - Authors
+      summary: Retrieve a list of authors
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/authorResponse'
+    post:
+      tags:
+        - Authors
+      summary: Add a new author
+      requestBody:
+        $ref: '#/components/requestBodies/AuthorBody'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/authorResponse'
+        '400':
+          description: If validation fails, a Bad Request HTTP status will be returned instead
+
+  /authors/{id}:
+    parameters:
+      - $ref: '#/components/parameters/authorId'
+    get:
+      tags:
+        - Authors
+      summary: Retrieve an existing author by id
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/authorResponse'
+        '404':
+          description: If the authorId doesn't exists, a Not Found HTTP status will be returned instead
+    put:
+      tags:
+        - Authors
+      summary: Update an existing author
+      requestBody:
+        $ref: '#/components/requestBodies/AuthorBody'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/authorResponse'
+        '400':
+          description: If validation fails, a Bad Request HTTP status will be returned instead
+        '404':
+          description: If the authorId doesn't exists, a Not Found HTTP status will be returned instead
+    delete:
+      tags:
+        - Authors
+      summary: Delete an existing author
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: If the authorId doesn't exists, a Not Found HTTP status will be returned instead
+
+  /publishers:
+    get:
+      tags:
+        - Publishers
+      summary: Retrieve a list of publishers
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/publisherResponse'
+    post:
+      tags:
+        - Publishers
+      summary: Add a new publisher
+      requestBody:
+        $ref: '#/components/requestBodies/PublisherBody'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/publisherResponse'
+        '400':
+          description: If validation fails, a Bad Request HTTP status will be returned instead
+
+  /publishers/{id}:
+    parameters:
+      - $ref: '#/components/parameters/publisherId'
+    get:
+      tags:
+        - Publishers
+      summary: Retrieve an existing publisher by id
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/publisherResponse'
+        '404':
+          description: If the publisherId doesn't exists, a Not Found HTTP status will be returned instead
+    put:
+      tags:
+        - Publishers
+      summary: Update an existing publisher
+      requestBody:
+        $ref: '#/components/requestBodies/PublisherBody'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/publisherResponse'
+        '400':
+          description: If validation fails, a Bad Request HTTP status will be returned instead
+        '404':
+          description: If the publisherId doesn't exists, a Not Found HTTP status will be returned instead
+    delete:
+      tags:
+        - Publishers
+      summary: Delete an existing publisher
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: If the publisherId doesn't exists, a Not Found HTTP status will be returned instead
+
+  /genres:
+    get:
+      tags:
+        - Genres
+      summary: Retrieve a list of genres
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/genreResponse'
+    post:
+      tags:
+        - Genres
+      summary: Add a new genre
+      requestBody:
+        $ref: '#/components/requestBodies/GenreBody'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/genreResponse'
+        '400':
+          description: If validation fails, a Bad Request HTTP status will be returned instead
+
+  /genres/{id}:
+    parameters:
+      - $ref: '#/components/parameters/genreId'
+    get:
+      tags:
+        - Genres
+      summary: Retrieve an existing genre by id
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/genreResponse'
+        '404':
+          description: If the genreId doesn't exists, a Not Found HTTP status will be returned instead
+    put:
+      tags:
+        - Genres
+      summary: Update an existing genre
+      requestBody:
+        $ref: '#/components/requestBodies/GenreBody'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/genreResponse'
+        '400':
+          description: If validation fails, a Bad Request HTTP status will be returned instead
+        '404':
+          description: If the genreId doesn't exists, a Not Found HTTP status will be returned instead
+    delete:
+      tags:
+        - Genres
+      summary: Delete an existing genre
+      responses:
+        '204':
+          description: If the genre has been successfully removed, a No Content HTTP status will be returned
+        '404':
+          description: If the genreId doesn't exists, a Not Found HTTP status will be returned instead
+
+  /books:
+    get:
+      tags:
+        - Books
+      summary: Retrieve a list of books
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/size'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/paginatedResponse'
+    post:
+      tags:
+        - Books
+      summary: Add a new book
+      requestBody:
+        $ref: '#/components/requestBodies/BookBody'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/bookResponse'
+        '400':
+          description: If validation fails, a Bad Request HTTP status will be returned instead
+
+  /books/{id}:
+    parameters:
+      - $ref: '#/components/parameters/bookId'
+    get:
+      tags:
+        - Books
+      summary: Retrieve an existing book by id
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/bookResponse'
+        '404':
+          description: If the bookId doesn't exists, a Not Found HTTP status will be returned instead
+    put:
+      tags:
+        - Books
+      summary: Update an existing book
+      requestBody:
+        $ref: '#/components/requestBodies/BookBody'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/bookResponse'
+        '400':
+          description: If validation fails, a Bad Request HTTP status will be returned instead
+        '404':
+          description: If the bookId doesn't exists, a Not Found HTTP status will be returned instead
+    delete:
+      tags:
+        - Books
+      summary: Delete an existing book
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: If the bookId doesn't exists, a Not Found HTTP status will be returned instead
+
+components:
+  parameters:
+    authorId:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+
+    publisherId:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+
+    bookId:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+
+    genreId:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+
+    page:
+      in: query
+      required: false
+      name: page
+      schema:
+        type: integer
+        default: 0
+        minimum: 0
+      description: Page number (0-based)
+
+    size:
+      in: query
+      required: false
+      name: size
+      schema:
+        type: integer
+        default: 10
+        minimum: 1
+      description: Number of items per page
+
+  requestBodies:
+    AuthorBody:
+      description: A JSON object containing author information
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/authorRequestBody'
+    GenreBody:
+      description: A JSON object containing genre information
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/genreRequestBody'
+    PublisherBody:
+      description: A JSON object containing publisher information
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/publisherRequestBody'
+    BookBody:
+      description: A JSON object containing book information
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/bookRequestBody'
+
+  schemas:
+    authorResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        firstName:
+          type: string
+        lastName:
+          type: string
+      example:
+        id: 1
+        firstName: 'James'
+        lastName: 'Gosling'
+
+    publisherResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+      example:
+        id: 1
+        name: 'Publisher'
+
+    bookResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+        creationDate:
+          type: string
+          format: date-time
+        updatedDate:
+          type: string
+          format: date-time
+        genre:
+          allOf:
+            - readOnly: true
+            - $ref: '#/components/schemas/genreResponse'
+        publisher:
+          allOf:
+            - readOnly: true
+            - $ref: '#/components/schemas/publisherResponse'
+        authors:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/authorResponse'
+      example:
+        id: 1
+        title: 'The Java Programming Language'
+        creationDate: '2023-01-01 00:00:00'
+        updatedDate: '2023-01-01 00:00:00'
+        genre:
+          id: 1
+          name: 'Computer Programming'
+        publisher:
+          id: 1
+          name: 'Publisher'
+        authors:
+          - id: 1
+            firstName: 'James'
+            lastName: 'Gosling'
+          - id: 2
+            firstName: 'Dennis'
+            lastName: 'Ritchie'
+          - id: 3
+            firstName: 'Bjarne'
+            lastName: 'Stroustrup'
+
+    paginatedResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/bookResponse'
+        pageable:
+          type: object
+          properties:
+            pageNumber:
+              type: integer
+            pageSize:
+              type: integer
+            sort:
+              type: object
+              properties:
+                empty:
+                  type: boolean
+                unsorted:
+                  type: boolean
+                sorted:
+                  type: boolean
+            offset:
+              type: integer
+            unpaged:
+              type: boolean
+            paged:
+              type: boolean
+        last:
+          type: boolean
+        totalElements:
+          type: integer
+        totalPages:
+          type: integer
+        first:
+          type: boolean
+        numberOfElements:
+          type: integer
+        size:
+          type: integer
+        number:
+          type: integer
+        sort:
+          type: object
+          properties:
+            empty:
+              type: boolean
+            unsorted:
+              type: boolean
+            sorted:
+              type: boolean
+        empty:
+          type: boolean
+      example:
+        content:
+          - id: 1
+            title: 'The Java Programming Language'
+            creationDate: '2023-01-01 00:00:00'
+            updatedDate: '2023-01-01 00:00:00'
+            genre:
+              id: 1
+              name: 'Computer Programming'
+            publisher:
+              id: 1
+              name: 'Publisher'
+            authors:
+              - id: 1
+                firstName: 'James'
+                lastName: 'Gosling'
+              - id: 2
+                firstName: 'Dennis'
+                lastName: 'Ritchie'
+              - id: 3
+                firstName: 'Bjarne'
+                lastName: 'Stroustrup'
+        pageable:
+          pageNumber: 0
+          pageSize: 10
+          sort:
+            empty: false
+            unsorted: false
+            sorted: true
+          offset: 0
+          unpaged: false
+          paged: true
+        last: true
+        totalElements: 2
+        totalPages: 1
+        first: true
+        numberOfElements: 2
+        size: 10
+        number: 0
+        sort:
+          empty: false
+          unsorted: false
+          sorted: true
+        empty: false
+
+    genreResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+      example:
+        id: 1
+        name: 'Computer Programming'
+
+    authorRequestBody:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+      example:
+        firstName: 'James'
+        lastName: 'Gosling'
+
+    publisherRequestBody:
+      type: object
+      properties:
+        name:
+          type: string
+      example:
+        name: 'HelloWorld'
+
+    bookRequestBody:
+      type: object
+      properties:
+        title:
+          type: string
+        genreId:
+          type: integer
+        publisherId:
+          type: integer
+        authorIds:
+          type: array
+          minItems: 1
+          items:
+            type: integer
+      example:
+        title: 'The Best Computer Scientists'
+        genreId: 1
+        publisherId: 1
+        authorIds:
+          - 1
+          - 2
+          - 3
+
+    genreRequestBody:
+      type: object
+      properties:
+        name:
+          type: string
+      example:
+        name: 'Computer Programming'
