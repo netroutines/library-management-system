@@ -1,0 +1,12 @@
+package com.netroutines.lms.book.exception;
+
+import com.netroutines.lms.api.advice.exceptions.ApiException;
+import org.springframework.http.HttpStatus;
+
+public class BookNotFoundException extends ApiException {
+
+    public BookNotFoundException() {
+        super("BOOK_NOT_FOUND", HttpStatus.NOT_FOUND);
+    }
+
+}
