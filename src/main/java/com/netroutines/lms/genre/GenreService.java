@@ -16,30 +16,33 @@ public class GenreService {
     public List<GenreResponse> list() {
         List<Genre> genres = genreRepository.findAll();
 
-        return genres.stream().map(genreMapper::toDTO).toList();
+        return genres.stream().map(genreMapper::toResponse).toList();
     }
 
     public GenreResponse create(GenreRequest genreRequest) {
-        Genre genre = genreMapper.toEntity(genreRequest);
+        var genre = genreMapper.toEntity(genreRequest);
         genreRepository.save(genre);
 
-        return genreMapper.toDTO(genre);
+        return genreMapper.toResponse(genre);
     }
 
     public GenreResponse read(Long id) {
-        return genreMapper.toDTO(findById(id));
+        return genreMapper.toResponse(findById(id));
     }
 
     public GenreResponse update(Long id, GenreRequest genreRequest) {
-        Genre current = findById(id);
-        current.setName(genreRequest.name());
-        genreRepository.save(current);
+        var genre = findById(id);
+        genre.setName(genreRequest.name());
+        genreRepository.save(genre);
 
-        return genreMapper.toDTO(current);
+        return genreMapper.toResponse(genre);
     }
 
     public void delete(Long id) {
-        findById(id);
+        if (!genreRepository.existsById(id)) {
+            throw new GenreNotFoundException();
+        }
+
         genreRepository.deleteById(id);
     }
 

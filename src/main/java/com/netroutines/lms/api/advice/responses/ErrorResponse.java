@@ -1,4 +1,12 @@
 package com.netroutines.lms.api.advice.responses;
 
-public record ErrorResponse(Integer status, String message) {
+import java.time.Instant;
+
+public record ErrorResponse(
+        Integer status,
+        String error,
+        String message,
+        String path,
+        Instant timestamp
+) {
 }

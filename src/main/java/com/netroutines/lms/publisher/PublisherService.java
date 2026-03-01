@@ -16,30 +16,33 @@ public class PublisherService {
     public List<PublisherResponse> list() {
         List<Publisher> publishers = publisherRepository.findAll();
 
-        return publishers.stream().map(publisherMapper::toDTO).toList();
+        return publishers.stream().map(publisherMapper::toResponse).toList();
     }
 
     public PublisherResponse create(PublisherRequest publisherRequest) {
-        Publisher publisher = publisherMapper.toEntity(publisherRequest);
+        var publisher = publisherMapper.toEntity(publisherRequest);
         publisherRepository.save(publisher);
 
-        return publisherMapper.toDTO(publisher);
+        return publisherMapper.toResponse(publisher);
     }
 
     public PublisherResponse read(Long id) {
-        return publisherMapper.toDTO(findById(id));
+        return publisherMapper.toResponse(findById(id));
     }
 
     public PublisherResponse update(Long id, PublisherRequest publisherRequest) {
-        Publisher current = findById(id);
-        current.setName(publisherRequest.name());
-        publisherRepository.save(current);
+        var publisher = findById(id);
+        publisher.setName(publisherRequest.name());
+        publisherRepository.save(publisher);
 
-        return publisherMapper.toDTO(current);
+        return publisherMapper.toResponse(publisher);
     }
 
     public void delete(Long id) {
-        findById(id);
+        if (!publisherRepository.existsById(id)) {
+            throw new PublisherNotFoundException();
+        }
+
         publisherRepository.deleteById(id);
     }
 
