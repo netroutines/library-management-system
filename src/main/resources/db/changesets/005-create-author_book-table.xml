@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="005-create-author_book-table" author="netroutines">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="author_book" />
+            </not>
+        </preConditions>
+
+        <createTable tableName="author_book">
+            <column name="book_id" type="bigint unsigned">
+                <constraints nullable="false" />
+            </column>
+            <column name="author_id" type="bigint unsigned">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+
+        <createIndex tableName="author_book" indexName="idx_author_book_book_id">
+            <column name="book_id" />
+        </createIndex>
+
+        <createIndex tableName="author_book" indexName="idx_author_book_author_id">
+            <column name="author_id" />
+        </createIndex>
+
+        <addForeignKeyConstraint
+                baseTableName="author_book"
+                baseColumnNames="book_id"
+                referencedTableName="books"
+                referencedColumnNames="id"
+                constraintName="fk_author_book_book"
+                onDelete="RESTRICT"
+                onUpdate="RESTRICT" />
+
+        <addForeignKeyConstraint
+                baseTableName="author_book"
+                baseColumnNames="author_id"
+                referencedTableName="authors"
+                referencedColumnNames="id"
+                constraintName="fk_author_book_author"
+                onDelete="RESTRICT"
+                onUpdate="RESTRICT" />
+
+        <rollback>
+            <dropForeignKeyConstraint baseTableName="author_book" constraintName="fk_author_book_book" />
+            <dropForeignKeyConstraint baseTableName="author_book" constraintName="fk_author_book_author" />
+            <dropIndex tableName="author_book" indexName="idx_author_book_book_id" />
+            <dropIndex tableName="author_book" indexName="idx_author_book_author_id" />
+            <dropTable tableName="author_book" />
+        </rollback>
+
+    </changeSet>
+
+</databaseChangeLog>

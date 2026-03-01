@@ -16,31 +16,34 @@ public class AuthorService {
     public List<AuthorResponse> list() {
         List<Author> authors = authorRepository.findAll();
 
-        return authors.stream().map(authorMapper::toDTO).toList();
+        return authors.stream().map(authorMapper::toResponse).toList();
     }
 
     public AuthorResponse create(AuthorRequest authorRequest) {
-        Author author = authorMapper.toEntity(authorRequest);
+        var author = authorMapper.toEntity(authorRequest);
         authorRepository.save(author);
 
-        return authorMapper.toDTO(author);
+        return authorMapper.toResponse(author);
     }
 
     public AuthorResponse read(Long id) {
-        return authorMapper.toDTO(findById(id));
+        return authorMapper.toResponse(findById(id));
     }
 
     public AuthorResponse update(Long id, AuthorRequest authorRequest) {
-        Author current = findById(id);
-        current.setFirstName(authorRequest.firstName());
-        current.setLastName(authorRequest.lastName());
-        authorRepository.save(current);
+        var author = findById(id);
+        author.setFirstName(authorRequest.firstName());
+        author.setLastName(authorRequest.lastName());
+        authorRepository.save(author);
 
-        return authorMapper.toDTO(current);
+        return authorMapper.toResponse(author);
     }
 
     public void delete(Long id) {
-        findById(id);
+        if (!authorRepository.existsById(id)) {
+            throw new AuthorNotFoundException();
+        }
+
         authorRepository.deleteById(id);
     }
 

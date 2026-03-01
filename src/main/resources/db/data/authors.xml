@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="seed-001-authors" author="netroutines">
+        <insert tableName="authors">
+            <column name="first_name" value="Ken" />
+            <column name="last_name" value="Arnold" />
+        </insert>
+        <insert tableName="authors">
+            <column name="first_name" value="James" />
+            <column name="last_name" value="Gosling" />
+        </insert>
+        <insert tableName="authors">
+            <column name="first_name" value="David" />
+            <column name="last_name" value="Holmes" />
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

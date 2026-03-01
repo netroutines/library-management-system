@@ -28,7 +28,7 @@ public class AuthorServiceTest {
     void testList() {
         List<Author> authors = List.of(new Author(1L, "James", "Gosling"));
         when(authorRepository.findAll()).thenReturn(authors);
-        when(authorMapper.toDTO(any())).thenReturn(new AuthorResponse(1L, "James", "Gosling"));
+        when(authorMapper.toResponse(any())).thenReturn(new AuthorResponse(1L, "James", "Gosling"));
 
         List<AuthorResponse> result = authorService.list();
 
@@ -49,7 +49,7 @@ public class AuthorServiceTest {
             return saved;
         });
 
-        when(authorMapper.toDTO(author))
+        when(authorMapper.toResponse(author))
                 .thenAnswer(invocation -> {
                     Author a = invocation.getArgument(0);
                     return new AuthorResponse(a.getId(), a.getFirstName(), a.getLastName());
@@ -64,7 +64,7 @@ public class AuthorServiceTest {
 
         verify(authorMapper).toEntity(authorRequest);
         verify(authorRepository).save(author);
-        verify(authorMapper).toDTO(author);
+        verify(authorMapper).toResponse(author);
         verifyNoMoreInteractions(authorRepository, authorMapper);
     }
 
@@ -72,42 +72,42 @@ public class AuthorServiceTest {
     void testRead() {
         Author author = new Author(1L, "James", "Gosling");
         when(authorRepository.findById(1L)).thenReturn(Optional.of(author));
-        when(authorMapper.toDTO(author)).thenReturn(new AuthorResponse(1L, "James", "Gosling"));
+        when(authorMapper.toResponse(author)).thenReturn(new AuthorResponse(1L, "James", "Gosling"));
 
-        AuthorResponse authorDTO = authorService.read(1L);
+        AuthorResponse authorResponse = authorService.read(1L);
 
-        assertEquals("Gosling", authorDTO.lastName());
+        assertEquals("Gosling", authorResponse.lastName());
     }
 
     @Test
     void testUpdate() {
         Long id = 1L;
         Author existing = new Author(id, "Sun", "Microsystems");
-        AuthorRequest update = new AuthorRequest("Oracle", "Corporation");
-        AuthorResponse authorDTO = new AuthorResponse(id, "Oracle", "Corporation");
+        AuthorRequest update = new AuthorRequest("Bjarne", "Stroustrup");
+        AuthorResponse authorResponse = new AuthorResponse(id, "Bjarne", "Stroustrup");
 
         when(authorRepository.findById(id)).thenReturn(Optional.of(existing));
         when(authorRepository.save(existing)).thenReturn(existing);
-        when(authorMapper.toDTO(existing)).thenReturn(authorDTO);
+        when(authorMapper.toResponse(existing)).thenReturn(authorResponse);
 
         AuthorResponse result = authorService.update(id, update);
 
-        assertEquals("Oracle", result.firstName());
-        assertEquals("Corporation", result.lastName());
+        assertEquals("Bjarne", result.firstName());
+        assertEquals("Stroustrup", result.lastName());
 
-        assertEquals("Oracle", existing.getFirstName());
-        assertEquals("Corporation", existing.getLastName());
+        assertEquals("Bjarne", existing.getFirstName());
+        assertEquals("Stroustrup", existing.getLastName());
     }
 
     @Test
     void testDelete() {
         Long id = 1L;
-        Author author = new Author(id, "James", "Gosling");
 
-        when(authorRepository.findById(id)).thenReturn(Optional.of(author));
+        when(authorRepository.existsById(id)).thenReturn(true);
         doNothing().when(authorRepository).deleteById(id);
 
         assertDoesNotThrow(() -> authorService.delete(id));
+
         verify(authorRepository).deleteById(id);
     }
 
