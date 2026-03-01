@@ -1,0 +1,22 @@
+# Debug mode
+app.debug=false
+
+# Datasource
+spring.datasource.url=jdbc:mysql://PROD_HOST/_DB
+spring.datasource.username=
+spring.datasource.password=
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+
+# Hibernate Logging
+logging.level.org.hibernate.SQL=OFF
+
+# Liquibase
+spring.liquibase.enabled=true
+spring.liquibase.drop-first=false
+spring.liquibase.change-log=classpath:/db/changelog.xml
+
+# MVC
+spring.web.error.whitelabel.enabled=false
+spring.web.error.include-message=never
+spring.web.error.include-binding-errors=never
+spring.web.error.include-stacktrace=never

@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Size;
 import java.util.Set;
 
 public record BookRequest(
-        @NotNull @NotEmpty @Size(max = 50) String title,
+        @NotNull @NotEmpty @Size(max = 100) String title,
         @NotNull Long genreId,
         @NotNull Long publisherId,
         @NotEmpty Set<Long> authorIds

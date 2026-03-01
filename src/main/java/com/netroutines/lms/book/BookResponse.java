@@ -10,10 +10,10 @@ import java.util.Set;
 public record BookResponse(
         Long id,
         String title,
-        LocalDateTime creationDate,
-        LocalDateTime updatedDate,
         GenreResponse genre,
         PublisherResponse publisher,
-        Set<AuthorResponse> authors
+        Set<AuthorResponse> authors,
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt
 ) {
 }
