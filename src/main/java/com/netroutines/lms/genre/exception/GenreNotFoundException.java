@@ -1,6 +1,6 @@
 package com.netroutines.lms.genre.exception;
 
-import com.netroutines.lms.api.advice.exceptions.ApiException;
+import com.netroutines.lms.api.advice.exception.ApiException;
 import org.springframework.http.HttpStatus;
 
 public class GenreNotFoundException extends ApiException {

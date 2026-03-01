@@ -1,15 +1,17 @@
 package com.netroutines.lms.api.advice;
 
-import com.netroutines.lms.api.advice.exceptions.ApiException;
-import com.netroutines.lms.api.advice.responses.ErrorResponse;
-import com.netroutines.lms.api.advice.responses.ValidationErrorResponse;
-import com.netroutines.lms.config.properties.ProfileProperties;
+import com.netroutines.lms.api.advice.exception.ApiException;
+import com.netroutines.lms.api.advice.response.ErrorResponse;
+import com.netroutines.lms.api.advice.response.ValidationErrorResponse;
+import com.netroutines.lms.config.property.ProfileProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -95,15 +97,61 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(body);
     }
 
+    @ExceptionHandler(HttpMediaTypeNotAcceptableException.class)
+    public ResponseEntity<ErrorResponse> handleNotAcceptable(HttpMediaTypeNotAcceptableException e) {
+        log.warn("Not acceptable media type at {}: {}", pathFrom(e), e.getMessage());
+
+        var body = new ErrorResponse(
+                HttpStatus.NOT_ACCEPTABLE.value(),
+                "NOT_ACCEPTABLE",
+                "Requested media type is not supported",
+                pathFrom(e),
+                now()
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_ACCEPTABLE)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(body);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorResponse> handleBadJson(HttpMessageNotReadableException e) {
+        log.warn("Invalid JSON at {}: {}", pathFrom(e), e.getMessage());
+
+        var body = new ErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                "INVALID_JSON",
+                "Malformed JSON request",
+                pathFrom(e),
+                now()
+        );
+
+        return ResponseEntity.badRequest().body(body);
+    }
+
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ErrorResponse> handleDataIntegrity(DataIntegrityViolationException e) {
 
-        log.warn("Delete failed due to FK constraint at {}: {}", pathFrom(e), e.getMessage());
+        String rootMessage = e.getMostSpecificCause().getMessage();
+
+        log.warn("Data integrity violation at {}: {}", pathFrom(e), rootMessage);
+
+        String errorCode;
+        String message;
+
+        if (rootMessage != null && rootMessage.contains("Duplicate entry")) {
+            errorCode = "UNIQUE_CONSTRAINT_VIOLATION";
+            message = "A resource with the same unique field already exists.";
+        } else {
+            errorCode = "FK_CONSTRAINT_VIOLATION";
+            message = "Resource cannot be deleted because it is referenced by other entities.";
+        }
 
         var body = new ErrorResponse(
                 HttpStatus.CONFLICT.value(),
-                "FK_CONSTRAINT_VIOLATION",
-                "Resource cannot be deleted because it is referenced by other entities.",
+                errorCode,
+                message,
                 pathFrom(e),
                 now()
         );
@@ -133,21 +181,6 @@ public class GlobalExceptionHandler {
         );
 
         return ResponseEntity.internalServerError().body(body);
-    }
-
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ErrorResponse> handleBadJson(HttpMessageNotReadableException e) {
-        log.warn("Invalid JSON at {}: {}", pathFrom(e), e.getMessage());
-
-        var body = new ErrorResponse(
-                HttpStatus.BAD_REQUEST.value(),
-                "INVALID_JSON",
-                "Malformed JSON request",
-                pathFrom(e),
-                now()
-        );
-
-        return ResponseEntity.badRequest().body(body);
     }
 
     private String pathFrom(Exception e) {

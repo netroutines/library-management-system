@@ -102,13 +102,15 @@ public class AuthorServiceTest {
     @Test
     void testDelete() {
         Long id = 1L;
+        Author author = new Author(id, "James", "Gosling");
 
-        when(authorRepository.existsById(id)).thenReturn(true);
-        doNothing().when(authorRepository).deleteById(id);
+        when(authorRepository.findById(id)).thenReturn(Optional.of(author));
 
-        assertDoesNotThrow(() -> authorService.delete(id));
+        authorService.delete(id);
 
-        verify(authorRepository).deleteById(id);
+        verify(authorRepository).findById(id);
+        verify(authorRepository).delete(author);
+        verifyNoMoreInteractions(authorRepository);
     }
 
     @Test

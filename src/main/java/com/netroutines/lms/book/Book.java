@@ -16,11 +16,13 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+import static lombok.AccessLevel.PROTECTED;
+
 @Entity
 @Table(name = "books")
 @Getter
 @Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor
 public class Book {
 

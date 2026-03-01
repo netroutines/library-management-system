@@ -8,7 +8,35 @@ The Library Management System provides a lightweight RESTful API for digitizing 
 the management of books, authors, genres, and publishers—streamlining cataloging, tracking, and overall resource
 maintenance.
 
-#### The project's structure follows the Spring's recommended Feature-Based Architecture (Vertical)
+## Architecture
+
+This branch follows a **Feature-Based Architecture (Vertical Slicing)**.
+
+Each business domain (author, book, genre, publisher) contains its own:
+
+- controller
+- service
+- repository
+- mapper
+- exception
+- DTOs
+
+Example structure:
+
+```
+com.netroutines.lms
+├── author
+├── book
+├── genre
+└── publisher
+```
+
+This approach improves:
+
+- High cohesion within each feature
+- Clear domain boundaries
+- Reduced cross-feature coupling
+- Better scalability for large systems
 
 ## Key Features
 

@@ -1,4 +1,4 @@
-package com.netroutines.lms.config.properties;
+package com.netroutines.lms.config.property;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

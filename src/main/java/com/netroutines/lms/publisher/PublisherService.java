@@ -39,11 +39,8 @@ public class PublisherService {
     }
 
     public void delete(Long id) {
-        if (!publisherRepository.existsById(id)) {
-            throw new PublisherNotFoundException();
-        }
-
-        publisherRepository.deleteById(id);
+        var publisher = findById(id);
+        publisherRepository.delete(publisher);
     }
 
     private Publisher findById(Long id) {

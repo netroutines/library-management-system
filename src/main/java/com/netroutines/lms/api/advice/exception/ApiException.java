@@ -1,4 +1,4 @@
-package com.netroutines.lms.api.advice.exceptions;
+package com.netroutines.lms.api.advice.exception;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
