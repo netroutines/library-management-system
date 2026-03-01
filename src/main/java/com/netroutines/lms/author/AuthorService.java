@@ -40,11 +40,8 @@ public class AuthorService {
     }
 
     public void delete(Long id) {
-        if (!authorRepository.existsById(id)) {
-            throw new AuthorNotFoundException();
-        }
-
-        authorRepository.deleteById(id);
+        var author = findById(id);
+        authorRepository.delete(author);
     }
 
     private Author findById(Long id) {

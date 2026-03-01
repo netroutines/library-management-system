@@ -22,6 +22,11 @@
             </column>
         </createTable>
 
+        <addUniqueConstraint
+                tableName="publishers"
+                columnNames="name"
+                constraintName="uk_publishers_name" />
+
         <rollback>
             <dropTable tableName="publishers" />
         </rollback>

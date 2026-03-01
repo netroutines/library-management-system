@@ -22,6 +22,11 @@
             </column>
         </createTable>
 
+        <addUniqueConstraint
+                tableName="genres"
+                columnNames="name"
+                constraintName="uk_genres_name" />
+
         <rollback>
             <dropTable tableName="genres" />
         </rollback>

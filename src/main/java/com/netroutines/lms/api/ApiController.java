@@ -1,6 +1,6 @@
 package com.netroutines.lms.api;
 
-import com.netroutines.lms.config.properties.AppProperties;
+import com.netroutines.lms.config.property.AppProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

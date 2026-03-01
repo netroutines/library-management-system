@@ -1,4 +1,4 @@
-package com.netroutines.lms.api.advice.responses;
+package com.netroutines.lms.api.advice.response;
 
 import java.time.Instant;
 import java.util.Map;

@@ -50,9 +50,8 @@ public class BookService {
                 deps.authors
         );
 
-        bookRepository.save(book);
-
-        return bookMapper.toResponse(book);
+        Book saved = bookRepository.save(book);
+        return bookMapper.toResponse(saved);
     }
 
     public BookResponse read(Long id) {
@@ -73,11 +72,8 @@ public class BookService {
     }
 
     public void delete(Long id) {
-        if (!bookRepository.existsById(id)) {
-            throw new BookNotFoundException();
-        }
-
-        bookRepository.deleteById(id);
+        var book = findById(id);
+        bookRepository.delete(book);
     }
 
     private Book findById(Long id) {
