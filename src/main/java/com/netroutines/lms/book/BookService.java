@@ -15,10 +15,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashSet;
 import java.util.List;
@@ -39,50 +37,46 @@ public class BookService {
         Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
         Page<Book> books = bookRepository.findAll(pageable);
 
-        return books.map(bookMapper::toDTO);
+        return books.map(bookMapper::toResponse);
     }
 
     public BookResponse create(BookRequest bookRequest) {
-        Genre genre = findGenreById(bookRequest.genreId());
-        Publisher publisher = findPublisherById(bookRequest.publisherId());
-        Set<Author> authors = findAuthorsById(bookRequest.authorIds());
+        var deps = resolveDependencies(bookRequest);
 
-        if (authors.size() != bookRequest.authorIds().size()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ONE_OR_MORE_AUTHORS_NOT_FOUND");
-        }
+        Book book = bookMapper.toEntity(
+                bookRequest,
+                deps.publisher,
+                deps.genre,
+                deps.authors
+        );
 
-        Book book = bookMapper.toEntity(bookRequest, publisher, genre, authors);
         bookRepository.save(book);
 
-        return bookMapper.toDTO(book);
+        return bookMapper.toResponse(book);
     }
 
     public BookResponse read(Long id) {
-        return bookMapper.toDTO(findById(id));
+        return bookMapper.toResponse(findById(id));
     }
 
     @Transactional
     public BookResponse update(Long id, BookRequest bookRequest) {
-        Book currentBook = findById(id);
+        var book = findById(id);
+        var deps = resolveDependencies(bookRequest);
 
-        Publisher publisher = findPublisherById(bookRequest.publisherId());
-        Genre genre = findGenreById(bookRequest.genreId());
-        Set<Author> authors = findAuthorsById(bookRequest.authorIds());
+        book.setTitle(bookRequest.title());
+        book.setPublisher(deps.publisher);
+        book.setGenre(deps.genre);
+        book.setAuthors(deps.authors);
 
-        if (authors.size() != bookRequest.authorIds().size()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ONE_OR_MORE_AUTHORS_NOT_FOUND");
-        }
-
-        currentBook.setTitle(bookRequest.title());
-        currentBook.setPublisher(publisher);
-        currentBook.setGenre(genre);
-        currentBook.setAuthors(authors);
-
-        return bookMapper.toDTO(bookRepository.save(currentBook));
+        return bookMapper.toResponse(book);
     }
 
     public void delete(Long id) {
-        findById(id);
+        if (!bookRepository.existsById(id)) {
+            throw new BookNotFoundException();
+        }
+
         bookRepository.deleteById(id);
     }
 
@@ -106,6 +100,18 @@ public class BookService {
         }
 
         return new HashSet<>(authors);
+    }
+
+    private record ResolvedBookDependencies(Publisher publisher, Genre genre, Set<Author> authors) {
+
+    }
+
+    private ResolvedBookDependencies resolveDependencies(BookRequest bookRequest) {
+        var publisher = findPublisherById(bookRequest.publisherId());
+        var genre = findGenreById(bookRequest.genreId());
+        Set<Author> authors = findAuthorsById(bookRequest.authorIds());
+
+        return new ResolvedBookDependencies(publisher, genre, authors);
     }
 
 }

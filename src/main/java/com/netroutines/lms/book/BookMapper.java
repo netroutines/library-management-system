@@ -15,15 +15,15 @@ import java.util.Set;
 @Mapper(componentModel = "spring", uses = {AuthorMapper.class, GenreMapper.class, PublisherMapper.class})
 public interface BookMapper {
 
-    BookResponse toDTO(Book book);
+    BookResponse toResponse(Book book);
 
     @Mappings({
             @Mapping(target = "id", ignore = true),
             @Mapping(target = "genre", source = "genre"),
             @Mapping(target = "publisher", source = "publisher"),
             @Mapping(target = "authors", source = "authors"),
-            @Mapping(target = "creationDate", ignore = true),
-            @Mapping(target = "updatedDate", ignore = true)
+            @Mapping(target = "createdAt", ignore = true),
+            @Mapping(target = "updatedAt", ignore = true)
     })
     Book toEntity(BookRequest request, Publisher publisher, Genre genre, Set<Author> authors);
 

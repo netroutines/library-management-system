@@ -2,25 +2,22 @@
 <databaseChangeLog
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd
-		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
-		http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.9.xsd">
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <include file="db/changesets/create-table-authors.xml"/>
-    <include file="db/changesets/create-table-publishers.xml"/>
-    <include file="db/changesets/create-table-books.xml"/>
-    <include file="db/changesets/create-table-books-authors.xml"/>
-    <include file="db/changesets/create-table-genres.xml"/>
+    <include file="db/changesets/001-create-authors-table.xml" />
+    <include file="db/changesets/002-create-genres-table.xml" />
+    <include file="db/changesets/003-create-publishers-table.xml" />
+    <include file="db/changesets/004-create-books-table.xml" />
+    <include file="db/changesets/005-create-author_book-table.xml" />
 
-    <include file="db/changesets/add-column-publisher-id-to-books.xml"/>
-    <include file="db/changesets/add-column-genre-id-to-books.xml"/>
+    <include file="db/changesets/006-add-column-genre_id-to-books.xml" />
+    <include file="db/changesets/007-add-column-publisher_id-to-books.xml" />
 
-    <include file="db/changesets/add-foreign-key-constraint-books-publisher.xml"/>
-    <include file="db/changesets/add-foreign-key-constraint-fk-book.xml"/>
-    <include file="db/changesets/add-foreign-key-constraint-fk-authors.xml"/>
-    <include file="db/changesets/add-foreign-key-constraint-books-genre.xml"/>
+    <include file="db/data/authors.xml" />
+    <include file="db/data/publishers.xml" />
+    <include file="db/data/genres.xml" />
+    <include file="db/data/books.xml" />
+    <include file="db/data/author-book.xml" />
 
 </databaseChangeLog>

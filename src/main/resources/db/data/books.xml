@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="seed-004-books" author="netroutines">
+        <insert tableName="books">
+            <column name="title" value="The Java Programming Language, 4th Edition" />
+            <column name="publisher_id" value="1" />
+            <column name="genre_id" value="1" />
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
