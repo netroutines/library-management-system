@@ -1,0 +1,1266 @@
+openapi: 3.1.0
+
+info:
+  title: Library Management System API
+  version: 1.0.0
+  description: |
+    RESTful API for managing authors, genres, publishers and books
+    within the Library Management System.
+
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+
+tags:
+  - name: Overview
+    description: API metadata and health endpoints
+  - name: Authors
+    description: Operations related to Author management
+  - name: Genres
+    description: Operations related to Genre management
+  - name: Publishers
+    description: Operations related to Publisher management
+  - name: Books
+    description: Operations related to Book management
+
+paths:
+
+  #################################
+  # API OVERVIEW
+  #################################
+
+  /:
+    get:
+      tags: [ Overview ]
+      summary: API overview
+      operationId: apiOverview
+      responses:
+        '200':
+          description: API metadata information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              examples:
+                success:
+                  $ref: '#/components/examples/ApiOverviewSuccess'
+        '406':
+          $ref: '#/components/responses/NotAcceptableResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  #################################
+  # AUTHORS
+  #################################
+
+  /authors:
+    get:
+      tags: [ Authors ]
+      summary: List all authors
+      operationId: listAuthors
+      responses:
+        '200':
+          $ref: '#/components/responses/AuthorListResponse'
+        '406':
+          $ref: '#/components/responses/NotAcceptableResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    post:
+      tags: [ Authors ]
+      summary: Create a new author
+      operationId: createAuthor
+      requestBody:
+        $ref: '#/components/requestBodies/AuthorRequestBody'
+      responses:
+        '201':
+          $ref: '#/components/responses/AuthorCreatedResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '406':
+          $ref: '#/components/responses/NotAcceptableResponse'
+        '415':
+          $ref: '#/components/responses/UnsupportedMediaTypeResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /authors/{id}:
+    parameters:
+      - $ref: '#/components/parameters/AuthorId'
+
+    get:
+      tags: [ Authors ]
+      summary: Retrieve an author
+      operationId: getAuthorById
+      responses:
+        '200':
+          $ref: '#/components/responses/AuthorSingleResponse'
+        '404':
+          $ref: '#/components/responses/AuthorNotFoundResponse'
+        '406':
+          $ref: '#/components/responses/NotAcceptableResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    put:
+      tags: [ Authors ]
+      summary: Update an author
+      operationId: updateAuthor
+      requestBody:
+        $ref: '#/components/requestBodies/AuthorRequestBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/AuthorUpdatedResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/AuthorNotFoundResponse'
+        '406':
+          $ref: '#/components/responses/NotAcceptableResponse'
+        '415':
+          $ref: '#/components/responses/UnsupportedMediaTypeResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    delete:
+      tags: [ Authors ]
+      summary: Delete an author
+      operationId: deleteAuthor
+      responses:
+        '204':
+          description: Author successfully deleted
+        '404':
+          $ref: '#/components/responses/AuthorNotFoundResponse'
+        '409':
+          $ref: '#/components/responses/FkConstraintViolationResponse'
+        '406':
+          $ref: '#/components/responses/NotAcceptableResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  #################################
+  # GENRES
+  #################################
+
+  /genres:
+    get:
+      tags: [ Genres ]
+      summary: List all genres
+      operationId: listGenres
+      responses:
+        '200':
+          $ref: '#/components/responses/GenreListResponse'
+        '406':
+          $ref: '#/components/responses/NotAcceptableResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    post:
+      tags: [ Genres ]
+      summary: Create a genre
+      operationId: createGenre
+      requestBody:
+        $ref: '#/components/requestBodies/GenreRequestBody'
+      responses:
+        '201':
+          $ref: '#/components/responses/GenreCreatedResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '406':
+          $ref: '#/components/responses/NotAcceptableResponse'
+        '409':
+          $ref: '#/components/responses/UkConstraintViolationResponse'
+        '415':
+          $ref: '#/components/responses/UnsupportedMediaTypeResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /genres/{id}:
+    parameters:
+      - $ref: '#/components/parameters/GenreId'
+
+    get:
+      tags: [ Genres ]
+      summary: Retrieve a genre
+      operationId: getGenreById
+      responses:
+        '200':
+          $ref: '#/components/responses/GenreSingleResponse'
+        '404':
+          $ref: '#/components/responses/GenreNotFoundResponse'
+        '406':
+          $ref: '#/components/responses/NotAcceptableResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    put:
+      tags: [ Genres ]
+      summary: Update a genre
+      operationId: updateGenre
+      requestBody:
+        $ref: '#/components/requestBodies/GenreRequestBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/GenreUpdatedResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/GenreNotFoundResponse'
+        '406':
+          $ref: '#/components/responses/NotAcceptableResponse'
+        '409':
+          $ref: '#/components/responses/UkConstraintViolationResponse'
+        '415':
+          $ref: '#/components/responses/UnsupportedMediaTypeResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    delete:
+      tags: [ Genres ]
+      summary: Delete a genre
+      operationId: deleteGenre
+      responses:
+        '204':
+          description: Genre successfully deleted
+        '404':
+          $ref: '#/components/responses/GenreNotFoundResponse'
+        '409':
+          $ref: '#/components/responses/FkConstraintViolationResponse'
+        '406':
+          $ref: '#/components/responses/NotAcceptableResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  #################################
+  # PUBLISHERS
+  #################################
+
+  /publishers:
+    get:
+      tags: [ Publishers ]
+      summary: List all publishers
+      operationId: listPublishers
+      responses:
+        '200':
+          $ref: '#/components/responses/PublisherListResponse'
+        '406':
+          $ref: '#/components/responses/NotAcceptableResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    post:
+      tags: [ Publishers ]
+      summary: Create a publisher
+      operationId: createPublisher
+      requestBody:
+        $ref: '#/components/requestBodies/PublisherRequestBody'
+      responses:
+        '201':
+          $ref: '#/components/responses/PublisherCreatedResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '406':
+          $ref: '#/components/responses/NotAcceptableResponse'
+        '409':
+          $ref: '#/components/responses/UkConstraintViolationResponse'
+        '415':
+          $ref: '#/components/responses/UnsupportedMediaTypeResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /publishers/{id}:
+    parameters:
+      - $ref: '#/components/parameters/PublisherId'
+
+    get:
+      tags: [ Publishers ]
+      summary: Retrieve a publisher
+      operationId: getPublisherById
+      responses:
+        '200':
+          $ref: '#/components/responses/PublisherSingleResponse'
+        '404':
+          $ref: '#/components/responses/PublisherNotFoundResponse'
+        '406':
+          $ref: '#/components/responses/NotAcceptableResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    put:
+      tags: [ Publishers ]
+      summary: Update a publisher
+      operationId: updatePublisher
+      requestBody:
+        $ref: '#/components/requestBodies/PublisherRequestBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/PublisherUpdatedResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/PublisherNotFoundResponse'
+        '406':
+          $ref: '#/components/responses/NotAcceptableResponse'
+        '409':
+          $ref: '#/components/responses/UkConstraintViolationResponse'
+        '415':
+          $ref: '#/components/responses/UnsupportedMediaTypeResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    delete:
+      tags: [ Publishers ]
+      summary: Delete a publisher
+      operationId: deletePublisher
+      responses:
+        '204':
+          description: Publisher successfully deleted
+        '404':
+          $ref: '#/components/responses/PublisherNotFoundResponse'
+        '409':
+          $ref: '#/components/responses/FkConstraintViolationResponse'
+        '406':
+          $ref: '#/components/responses/NotAcceptableResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  #################################
+  # BOOKS
+  #################################
+
+  /books:
+    get:
+      tags: [ Books ]
+      summary: List books (paginated)
+      operationId: listBooks
+      parameters:
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/SizeParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/BookPageResponse'
+        '406':
+          $ref: '#/components/responses/NotAcceptableResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    post:
+      tags: [ Books ]
+      summary: Create a book
+      operationId: createBook
+      requestBody:
+        $ref: '#/components/requestBodies/BookRequestBody'
+      responses:
+        '201':
+          $ref: '#/components/responses/BookCreatedResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/GenericNotFoundResponse'
+        '406':
+          $ref: '#/components/responses/NotAcceptableResponse'
+        '415':
+          $ref: '#/components/responses/UnsupportedMediaTypeResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /books/{id}:
+    parameters:
+      - $ref: '#/components/parameters/BookId'
+
+    get:
+      tags: [ Books ]
+      summary: Retrieve a book
+      operationId: getBookById
+      responses:
+        '200':
+          $ref: '#/components/responses/BookSingleResponse'
+        '404':
+          $ref: '#/components/responses/BookNotFoundResponse'
+        '406':
+          $ref: '#/components/responses/NotAcceptableResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    put:
+      tags: [ Books ]
+      summary: Update a book
+      operationId: updateBook
+      requestBody:
+        $ref: '#/components/requestBodies/BookRequestBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/BookUpdatedResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/GenericNotFoundResponse'
+        '406':
+          $ref: '#/components/responses/NotAcceptableResponse'
+        '415':
+          $ref: '#/components/responses/UnsupportedMediaTypeResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    delete:
+      tags: [ Books ]
+      summary: Delete a book
+      operationId: deleteBook
+      responses:
+        '204':
+          description: Book successfully deleted
+        '404':
+          $ref: '#/components/responses/BookNotFoundResponse'
+        '406':
+          $ref: '#/components/responses/NotAcceptableResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+components:
+
+  #################################
+  # PARAMETERS
+  #################################
+
+  parameters:
+    AuthorId:
+      name: id
+      in: path
+      required: true
+      schema: { type: integer, format: int64, minimum: 1 }
+      example: 1
+
+    GenreId:
+      name: id
+      in: path
+      required: true
+      schema: { type: integer, format: int64, minimum: 1 }
+      example: 1
+
+    PublisherId:
+      name: id
+      in: path
+      required: true
+      schema: { type: integer, format: int64, minimum: 1 }
+      example: 1
+
+    BookId:
+      name: id
+      in: path
+      required: true
+      schema: { type: integer, format: int64, minimum: 1 }
+      example: 1
+
+    PageParam:
+      name: page
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+      example: 0
+
+    SizeParam:
+      name: size
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 10
+      example: 10
+
+  #################################
+  # REQUEST BODIES
+  #################################
+
+  requestBodies:
+    AuthorRequestBody:
+      required: true
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/AuthorRequest' }
+          examples:
+            request:
+              $ref: '#/components/examples/AuthorRequestExample'
+
+    GenreRequestBody:
+      required: true
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/GenreRequest' }
+          examples:
+            request:
+              $ref: '#/components/examples/GenreRequestExample'
+
+    PublisherRequestBody:
+      required: true
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/PublisherRequest' }
+          examples:
+            request:
+              $ref: '#/components/examples/PublisherRequestExample'
+
+    BookRequestBody:
+      required: true
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/BookRequest' }
+          examples:
+            request:
+              $ref: '#/components/examples/BookRequestExample'
+
+  #################################
+  # RESPONSES
+  #################################
+
+  responses:
+
+    # ---- Overview ----
+    ApiOverviewSuccessResponse:
+      description: API metadata information
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ApiResponse' }
+          examples:
+            success:
+              $ref: '#/components/examples/ApiOverviewSuccess'
+
+    # ---- Authors ----
+    AuthorListResponse:
+      description: List of authors
+      content:
+        application/json:
+          schema:
+            type: array
+            items: { $ref: '#/components/schemas/AuthorResponse' }
+          examples:
+            list:
+              $ref: '#/components/examples/AuthorListExample'
+
+    AuthorSingleResponse:
+      description: Author retrieved
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/AuthorResponse' }
+          examples:
+            author:
+              $ref: '#/components/examples/AuthorSingleExample'
+
+    AuthorCreatedResponse:
+      description: Author created
+      headers:
+        Location:
+          schema: { type: string, format: uri }
+          example: http://localhost:8080/authors/1"
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/AuthorResponse' }
+          examples:
+            created:
+              $ref: '#/components/examples/AuthorSingleExample'
+
+    AuthorUpdatedResponse:
+      description: Author updated
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/AuthorResponse' }
+          examples:
+            updated:
+              $ref: '#/components/examples/AuthorSingleExample'
+
+    AuthorNotFoundResponse:
+      description: Author not found
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ErrorResponse' }
+          examples:
+            notFound:
+              $ref: '#/components/examples/AuthorNotFoundExample'
+
+    # ---- Genres ----
+    GenreListResponse:
+      description: List of genres
+      content:
+        application/json:
+          schema:
+            type: array
+            items: { $ref: '#/components/schemas/GenreResponse' }
+          examples:
+            list:
+              $ref: '#/components/examples/GenreListExample'
+
+    GenreSingleResponse:
+      description: Genre retrieved
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/GenreResponse' }
+          examples:
+            genre:
+              $ref: '#/components/examples/GenreSingleExample'
+
+    GenreCreatedResponse:
+      description: Genre created
+      headers:
+        Location:
+          schema: { type: string, format: uri }
+          example: http://localhost:8080/genres/1
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/GenreResponse' }
+          examples:
+            created:
+              $ref: '#/components/examples/GenreSingleExample'
+
+    GenreUpdatedResponse:
+      description: Genre updated
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/GenreResponse' }
+          examples:
+            updated:
+              $ref: '#/components/examples/GenreSingleExample'
+
+    GenreNotFoundResponse:
+      description: Genre not found
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ErrorResponse' }
+          examples:
+            notFound:
+              $ref: '#/components/examples/GenreNotFoundExample'
+
+    # ---- Publishers ----
+    PublisherListResponse:
+      description: List of publishers
+      content:
+        application/json:
+          schema:
+            type: array
+            items: { $ref: '#/components/schemas/PublisherResponse' }
+          examples:
+            list:
+              $ref: '#/components/examples/PublisherListExample'
+
+    PublisherSingleResponse:
+      description: Publisher retrieved
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/PublisherResponse' }
+          examples:
+            publisher:
+              $ref: '#/components/examples/PublisherSingleExample'
+
+    PublisherCreatedResponse:
+      description: Publisher created
+      headers:
+        Location:
+          schema: { type: string, format: uri }
+          example: http://localhost:8080/publishers/1
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/PublisherResponse' }
+          examples:
+            created:
+              $ref: '#/components/examples/PublisherSingleExample'
+
+    PublisherUpdatedResponse:
+      description: Publisher updated
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/PublisherResponse' }
+          examples:
+            updated:
+              $ref: '#/components/examples/PublisherSingleExample'
+
+    PublisherNotFoundResponse:
+      description: Publisher not found
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ErrorResponse' }
+          examples:
+            notFound:
+              $ref: '#/components/examples/PublisherNotFoundExample'
+
+    # ---- Books ----
+    BookPageResponse:
+      description: Paginated list of books
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/PageBookResponse' }
+          examples:
+            page:
+              $ref: '#/components/examples/BookPageExample'
+
+    BookSingleResponse:
+      description: Book retrieved
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/BookResponse' }
+          examples:
+            book:
+              $ref: '#/components/examples/BookSingleExample'
+
+    BookCreatedResponse:
+      description: Book created
+      headers:
+        Location:
+          schema: { type: string, format: uri }
+          example: http://localhost:8080/books/1
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/BookResponse' }
+          examples:
+            created:
+              $ref: '#/components/examples/BookSingleExample'
+
+    BookUpdatedResponse:
+      description: Book updated
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/BookResponse' }
+          examples:
+            updated:
+              $ref: '#/components/examples/BookSingleExample'
+
+    BookNotFoundResponse:
+      description: Book not found
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ErrorResponse' }
+          examples:
+            notFound:
+              $ref: '#/components/examples/BookNotFoundExample'
+
+    # ---- Shared errors ----
+    GenericNotFoundResponse:
+      description: Resource not found
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ErrorResponse' }
+          examples:
+            notFound:
+              $ref: '#/components/examples/GenericNotFoundExample'
+
+    BadRequestResponse:
+      description: Validation error or malformed JSON
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - { $ref: '#/components/schemas/ValidationErrorResponse' }
+              - { $ref: '#/components/schemas/ErrorResponse' }
+          examples:
+            validationError:
+              $ref: '#/components/examples/ValidationErrorExample'
+            invalidJson:
+              $ref: '#/components/examples/InvalidJsonExample'
+
+    UnsupportedMediaTypeResponse:
+      description: Unsupported content type
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ErrorResponse' }
+          examples:
+            unsupportedMediaType:
+              $ref: '#/components/examples/UnsupportedMediaTypeExample'
+
+    NotAcceptableResponse:
+      description: Requested media type is not supported
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ErrorResponse' }
+          examples:
+            notAcceptableOverview:
+              $ref: '#/components/examples/NotAcceptableOverviewExample'
+            notAcceptableBooks:
+              $ref: '#/components/examples/NotAcceptableBooksExample'
+            notAcceptableAuthors:
+              $ref: '#/components/examples/NotAcceptableAuthorsExample'
+            notAcceptableGenres:
+              $ref: '#/components/examples/NotAcceptableGenresExample'
+            notAcceptablePublishers:
+              $ref: '#/components/examples/NotAcceptablePublishersExample'
+
+    UkConstraintViolationResponse:
+      description: A resource with the same unique field already exists.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ErrorResponse' }
+          examples:
+            ukGenre:
+              $ref: '#/components/examples/UkGenreExample'
+            ukPublisher:
+              $ref: '#/components/examples/UkPublisherExample'
+
+    FkConstraintViolationResponse:
+      description: Resource cannot be deleted because it is referenced by other entities
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ErrorResponse' }
+          examples:
+            fkAuthor:
+              $ref: '#/components/examples/FkAuthorDeleteExample'
+            fkGenre:
+              $ref: '#/components/examples/FkGenreDeleteExample'
+            fkPublisher:
+              $ref: '#/components/examples/FkPublisherDeleteExample'
+
+    InternalServerError:
+      description: Unexpected server error
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ErrorResponse' }
+          examples:
+            internalServerError:
+              $ref: '#/components/examples/InternalServerErrorExample'
+
+  #################################
+  # SCHEMAS
+  #################################
+
+  schemas:
+
+    ApiResponse:
+      type: object
+      required: [ appName, timestamp ]
+      properties:
+        appName:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+
+    AuthorRequest:
+      type: object
+      required: [ firstName, lastName ]
+      properties:
+        firstName: { type: string, minLength: 1, maxLength: 100 }
+        lastName: { type: string, minLength: 1, maxLength: 100 }
+
+    AuthorResponse:
+      type: object
+      required: [ id, firstName, lastName ]
+      properties:
+        id: { type: integer, format: int64 }
+        firstName: { type: string }
+        lastName: { type: string }
+
+    GenreRequest:
+      type: object
+      required: [ name ]
+      properties:
+        name: { type: string, minLength: 1, maxLength: 100 }
+
+    GenreResponse:
+      type: object
+      required: [ id, name ]
+      properties:
+        id: { type: integer, format: int64 }
+        name: { type: string }
+
+    PublisherRequest:
+      type: object
+      required: [ name ]
+      properties:
+        name: { type: string, minLength: 1, maxLength: 100 }
+
+    PublisherResponse:
+      type: object
+      required: [ id, name ]
+      properties:
+        id: { type: integer, format: int64 }
+        name: { type: string }
+
+    BookRequest:
+      type: object
+      required: [ title, genreId, publisherId, authorIds ]
+      properties:
+        title: { type: string, minLength: 1, maxLength: 100 }
+        genreId: { type: integer, format: int64 }
+        publisherId: { type: integer, format: int64 }
+        authorIds:
+          type: array
+          minItems: 1
+          items: { type: integer, format: int64 }
+
+    BookResponse:
+      type: object
+      required: [ id, title, genre, publisher, authors, createdAt, updatedAt ]
+      properties:
+        id: { type: integer, format: int64 }
+        title: { type: string }
+        genre: { $ref: '#/components/schemas/GenreResponse' }
+        publisher: { $ref: '#/components/schemas/PublisherResponse' }
+        authors:
+          type: array
+          items: { $ref: '#/components/schemas/AuthorResponse' }
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    PageBookResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items: { $ref: '#/components/schemas/BookResponse' }
+        empty: { type: boolean }
+        first: { type: boolean }
+        last: { type: boolean }
+        number: { type: integer }
+        numberOfElements: { type: integer }
+        pageable:
+          type: object
+          properties:
+            offset: { type: integer }
+            pageNumber: { type: integer }
+            pageSize: { type: integer }
+            paged: { type: boolean }
+            sort:
+              type: object
+              properties:
+                empty: { type: boolean }
+                sorted: { type: boolean }
+                unsorted: { type: boolean }
+            unpaged: { type: boolean }
+        size: { type: integer }
+        sort:
+          type: object
+          properties:
+            empty: { type: boolean }
+            sorted: { type: boolean }
+            unsorted: { type: boolean }
+        totalElements: { type: integer }
+        totalPages: { type: integer }
+
+    ErrorResponse:
+      type: object
+      required: [ status, error, message, path, timestamp ]
+      properties:
+        status: { type: integer }
+        error: { type: string }
+        message: { type: string }
+        path: { type: string }
+        timestamp:
+          type: string
+          format: date-time
+
+    ValidationErrorResponse:
+      allOf:
+        - $ref: '#/components/schemas/ErrorResponse'
+        - type: object
+          required: [ errors ]
+          properties:
+            errors:
+              type: object
+              additionalProperties:
+                type: string
+
+  #################################
+  # EXAMPLES
+  #################################
+
+  examples:
+
+    # ---- Overview ----
+    ApiOverviewSuccess:
+      value:
+        appName: library-management-system
+        timestamp: "2026-03-01T21:07:34.859691Z"
+
+    # ---- Authors ----
+    AuthorListExample:
+      value:
+        - id: 1
+          firstName: Ken
+          lastName: Arnold
+        - id: 2
+          firstName: James
+          lastName: Gosling
+        - id: 3
+          firstName: David
+          lastName: Holmes
+
+    AuthorSingleExample:
+      value:
+        id: 1
+        firstName: James
+        lastName: Gosling
+
+    AuthorRequestExample:
+      value:
+        firstName: James
+        lastName: Gosling
+
+    AuthorNotFoundExample:
+      value:
+        status: 404
+        error: NOT_FOUND
+        message: AUTHOR_NOT_FOUND
+        path: /authors/4
+        timestamp: "2026-03-01T21:19:49.554907600Z"
+
+    # ---- Genres ----
+    GenreListExample:
+      value:
+        - id: 1
+          name: Computers & Technology
+
+    GenreSingleExample:
+      value:
+        id: 1
+        name: Computers & Technology
+
+    GenreRequestExample:
+      value:
+        name: Computers & Technology
+
+    GenreNotFoundExample:
+      value:
+        status: 404
+        error: NOT_FOUND
+        message: GENRE_NOT_FOUND
+        path: /genres/4
+        timestamp: "2026-03-01T21:19:49.554907600Z"
+
+    # ---- Publishers ----
+    PublisherListExample:
+      value:
+        - id: 1
+          name: Addison-Wesley Professional
+
+    PublisherSingleExample:
+      value:
+        id: 1
+        name: Addison-Wesley Professional
+
+    PublisherRequestExample:
+      value:
+        name: Addison-Wesley Professional
+
+    PublisherNotFoundExample:
+      value:
+        status: 404
+        error: NOT_FOUND
+        message: PUBLISHER_NOT_FOUND
+        path: /publishers/4
+        timestamp: "2026-03-01T21:19:49.554907600Z"
+
+    # ---- Books ----
+    BookSingleExample:
+      value:
+        id: 1
+        title: The Java Programming Language, 4th Edition
+        genre:
+          id: 1
+          name: Computers & Technology
+        publisher:
+          id: 1
+          name: Addison-Wesley Professional
+        authors:
+          - id: 3
+            firstName: David
+            lastName: Holmes
+          - id: 1
+            firstName: Ken
+            lastName: Arnold
+          - id: 2
+            firstName: James
+            lastName: Gosling
+        createdAt: "2026-03-01T23:14:09"
+        updatedAt: "2026-03-01T23:14:09"
+
+    BookRequestExample:
+      value:
+        title: The Java Programming Language, 4th Edition
+        genreId: 1
+        publisherId: 1
+        authorIds: [ 3, 1, 2 ]
+
+    BookPageExample:
+      value:
+        content:
+          - id: 1
+            title: The Java Programming Language, 4th Edition
+            genre:
+              id: 1
+              name: Computers & Technology
+            publisher:
+              id: 1
+              name: Addison-Wesley Professional
+            authors:
+              - id: 3
+                firstName: David
+                lastName: Holmes
+              - id: 1
+                firstName: Ken
+                lastName: Arnold
+              - id: 2
+                firstName: James
+                lastName: Gosling
+            createdAt: "2026-03-01T23:14:09"
+            updatedAt: "2026-03-01T23:14:09"
+        empty: false
+        first: true
+        last: true
+        number: 0
+        numberOfElements: 1
+        pageable:
+          offset: 0
+          pageNumber: 0
+          pageSize: 10
+          paged: true
+          sort:
+            empty: false
+            sorted: true
+            unsorted: false
+          unpaged: false
+        size: 10
+        sort:
+          empty: false
+          sorted: true
+          unsorted: false
+        totalElements: 1
+        totalPages: 1
+
+    BookNotFoundExample:
+      value:
+        status: 404
+        error: NOT_FOUND
+        message: BOOK_NOT_FOUND
+        path: /books/4
+        timestamp: "2026-03-01T21:19:49.554907600Z"
+
+    # ---- FK Constraint ----
+    FkAuthorDeleteExample:
+      value:
+        status: 409
+        error: FK_CONSTRAINT_VIOLATION
+        message: Resource cannot be deleted because it is referenced by other entities.
+        path: /authors/1
+        timestamp: "2026-03-01T21:19:07.854269100Z"
+
+    FkGenreDeleteExample:
+      value:
+        status: 409
+        error: FK_CONSTRAINT_VIOLATION
+        message: Resource cannot be deleted because it is referenced by other entities.
+        path: /genres/1
+        timestamp: "2026-03-01T21:19:07.854269100Z"
+
+    FkPublisherDeleteExample:
+      value:
+        status: 409
+        error: FK_CONSTRAINT_VIOLATION
+        message: Resource cannot be deleted because it is referenced by other entities.
+        path: /publishers/1
+        timestamp: "2026-03-01T21:19:07.854269100Z"
+
+    # ---- UK Constraint ----
+    UkGenreExample:
+      value:
+        status: 409
+        error: UNIQUE_CONSTRAINT_VIOLATION
+        message: A resource with the same unique field already exists.
+        path: /genres
+        timestamp: "2026-03-01T21:19:07.854269100Z"
+
+    UkPublisherExample:
+      value:
+        status: 409
+        error: UNIQUE_CONSTRAINT_VIOLATION
+        message: A resource with the same unique field already exists.
+        path: /publishers
+        timestamp: "2026-03-01T21:19:07.854269100Z"
+
+    # ---- Not acceptable ----
+    NotAcceptableBooksExample:
+      value:
+        status: 406
+        error: NOT_ACCEPTABLE
+        message: Requested media type is not supported
+        path: /books
+        timestamp: "2026-03-01T21:20:28.921319800Z"
+
+    NotAcceptableAuthorsExample:
+      value:
+        status: 406
+        error: NOT_ACCEPTABLE
+        message: Requested media type is not supported
+        path: /authors
+        timestamp: "2026-03-01T21:20:28.921319800Z"
+
+    NotAcceptableGenresExample:
+      value:
+        status: 406
+        error: NOT_ACCEPTABLE
+        message: Requested media type is not supported
+        path: /genres
+        timestamp: "2026-03-01T21:20:28.921319800Z"
+
+    NotAcceptablePublishersExample:
+      value:
+        status: 406
+        error: NOT_ACCEPTABLE
+        message: Requested media type is not supported
+        path: /publishers
+        timestamp: "2026-03-01T21:20:28.921319800Z"
+
+    NotAcceptableOverviewExample:
+      value:
+        status: 406
+        error: NOT_ACCEPTABLE
+        message: Requested media type is not supported
+        path: /
+        timestamp: "2026-03-01T21:20:28.921319800Z"
+
+    # ---- Generic not found ----
+    GenericNotFoundExample:
+      value:
+        status: 404
+        error: NOT_FOUND
+        message: RESOURCE_NOT_FOUND
+        path: /unknown
+        timestamp: "2026-03-01T21:19:49.554907600Z"
+
+    # ---- Bad request ----
+    InvalidJsonExample:
+      value:
+        status: 400
+        error: INVALID_JSON
+        message: Malformed JSON request
+        path: /path
+        timestamp: "2026-03-01T21:20:00.000000000Z"
+
+    ValidationErrorExample:
+      value:
+        status: 400
+        error: VALIDATION_ERROR
+        message: Validation failed
+        errors:
+          firstName: must not be empty
+        path: /authors
+        timestamp: "2026-03-01T21:20:00.000000000Z"
+
+    UnsupportedMediaTypeExample:
+      value:
+        status: 400
+        error: UNSUPPORTED_MEDIA_TYPE
+        message: The content type is not supported
+        path: /path
+        timestamp: "2026-03-01T21:20:00.000000000Z"
+
+    InternalServerErrorExample:
+      value:
+        status: 500
+        error: INTERNAL_SERVER_ERROR
+        message: An unexpected error occurred
+        path: /path
+        timestamp: "2026-03-01T21:20:00.000000000Z"
