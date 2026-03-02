@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="007-add-column-publisher_id-to-books" author="netroutines">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="books" columnName="publisher_id" />
+            </not>
+        </preConditions>
+
+        <addColumn tableName="books">
+            <column name="publisher_id" type="bigint unsigned">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+
+        <createIndex tableName="books" indexName="idx_books_publisher_id">
+            <column name="publisher_id" />
+        </createIndex>
+
+        <addForeignKeyConstraint
+                baseTableName="books"
+                baseColumnNames="publisher_id"
+                referencedTableName="publishers"
+                referencedColumnNames="id"
+                constraintName="fk_books_publisher"
+                onUpdate="RESTRICT"
+                onDelete="RESTRICT" />
+
+        <rollback>
+            <dropIndex tableName="books" indexName="idx_books_publisher_id" />
+            <dropForeignKeyConstraint baseTableName="books" constraintName="fk_books_publisher" />
+            <dropColumn tableName="books" columnName="publisher_id" />
+        </rollback>
+
+    </changeSet>
+
+</databaseChangeLog>
